@@ -16,6 +16,9 @@ var a = new BigNumber([1]);
 var b = new BigNumber([1]);
 var c = new BigNumber([0]);
 
+Span<int> arr1 = stackalloc int[100_000];
+Span<int> arr2 = stackalloc int[100_000];
+var isArr1UsedLast = false;
 
 var index = 2;
 var sw = Stopwatch.StartNew();
@@ -29,19 +32,23 @@ while (true)
     {
         break;
     }
-    
-    aSw.Start();
-    b.Container.CopyTo(c.Container);
-    aSw.Stop();
-    
-    bSw.Start();
+
+    var dest = isArr1UsedLast ? arr2 : arr1;
+    isArr1UsedLast = !isArr1UsedLast;
+
+    // aSw.Start();
+    b.Container.CopyTo(dest);
+    // b.Container.CopyTo(c.Container);
+    // aSw.Stop();
+
+    // bSw.Start();
     b.AddToContainer(a.Container);
-    bSw.Stop();
-    
-    cSw.Start();
-    c.Container.CopyTo(a.Container);
-    cSw.Stop();
-    
+    // bSw.Stop();
+
+    // cSw.Start();
+    a.Container = dest;
+    // cSw.Stop();
+
     index++;
     // if (index % 1000 == 0)
     // {
@@ -49,6 +56,6 @@ while (true)
     // }
 }
 
-Console.WriteLine("Executed {0} in {1}; a: {2} b: {3}, c: {4}", index, sw.ElapsedMilliseconds, aSw.ElapsedMilliseconds, bSw.ElapsedMilliseconds, cSw.ElapsedMilliseconds);
+Console.WriteLine("Executed {0} in {1}; a: {2} b: {3}, c: {4}", index, sw.ElapsedMilliseconds, aSw.ElapsedMilliseconds,
+    bSw.ElapsedMilliseconds, cSw.ElapsedMilliseconds);
 Console.WriteLine(b.Container.ToArray());
-

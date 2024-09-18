@@ -18,6 +18,14 @@ public ref struct BigNumber
         _size = number.Length;
     }
 
+    public void CopyFrom(Span<int> numbers)
+    {
+        for (var index = 0; index < numbers.Length; index++)
+        {
+            Container[index] = numbers[index];
+        }
+    }
+
     public bool IsStartingPandigital()
     {
         if (_size < 9)
@@ -26,6 +34,9 @@ public ref struct BigNumber
         }
 
         var numbers = Container[(_size - 9)..(_size)];
+        
+        var sum = 0;
+        
 
         var result = true;
         foreach (var number in Numbers)
@@ -79,16 +90,9 @@ public ref struct BigNumber
         for (var index = 0; index < _size; index++)
         {
             var sum = Container[index] + b[index] + remain;
-            remain = 0;
-            if (sum > 9)
-            {
-                remain = sum / 10;
-                Container[index] = sum % 10;
-            }
-            else
-            {
-                Container[index] = sum;
-            }
+            
+            remain = sum / 10;
+            Container[index] = sum % 10;
         }
 
         if (remain > 0)
