@@ -5,8 +5,6 @@ public static class Subsets
     public static List<List<int>> CalsulateSubsets(List<int> set)
     {
         var subsets = new List<List<int>>();
-        subsets.Add(new List<int>());
-        subsets.Add(set);
 
         for (int i = 1; i < set.Count; i++)
         {
@@ -27,6 +25,16 @@ public static class Subsets
         }
 
         return subsets;
+    }
+
+    public static int SubsetSum(List<int> set)
+    {
+        return set.Sum();
+    }
+
+    public static bool AreDisjoint(List<int> set1, List<int> set2)
+    {
+        return !(set1.Intersect(set2).Any());
     }
     
     private static List<int> CreatePointers(int level){
